@@ -1,8 +1,8 @@
 #include "Contact.hpp"
 #include "PhoneBook.hpp"
 #include <iostream>
-#include <cstdlib>
 #include <iomanip>
+#include <stdexcept>
 
 PhoneBook::PhoneBook()
  : contact_count(0),
@@ -40,9 +40,8 @@ std::string PhoneBook::read_empty(std::string sentence)
   while(command.empty())
   {
     std::cout << sentence;
-    std::getline(std::cin, command);
-    if(std::cin.eof())
-      std::exit(1);
+    if (!std::getline(std::cin, command))
+      throw std::runtime_error("");
     command = trim(command);
   }
   return(command);
@@ -88,9 +87,8 @@ std::string PhoneBook::readnum_empty(std::string sentence)
   while(command.empty())
   {
     std::cout << sentence;
-    std::getline(std::cin, command);
-    if(std::cin.eof())
-      std::exit(1);
+    if (!std::getline(std::cin, command))
+      throw std::runtime_error("");
     command = numtrim(command);
   }
   return(command);
@@ -163,8 +161,6 @@ void PhoneBook::show()
 	if (str_index.length() != 1 || str_index[0] < '1' || str_index[0] > '0'
 		+ contact_count)
 	{
-    if(std::cin.eof())
-      std::exit(1);
 		std::cout << "invalid index" << std::endl;
 		return ;
 	}
