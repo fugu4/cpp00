@@ -1,6 +1,7 @@
 #include "Contact.hpp"
 #include "PhoneBook.hpp"
 #include <iostream>
+#include <cstdlib>
 #include <iomanip>
 
 PhoneBook::PhoneBook()
@@ -25,11 +26,13 @@ std::string PhoneBook::read_empty(std::string sentence)
 {
   std::string command;
   command = ("");
- 
+
   while(command.empty())
   {
     std::cout << sentence;
     std::getline(std::cin, command);
+    if(std::cin.eof())
+      std::exit(1);
     command = trim(command);
   }
   return(command);
@@ -60,11 +63,13 @@ std::string PhoneBook::readnum_empty(std::string sentence)
 {
   std::string command;
   command = ("");
- 
+
   while(command.empty())
   {
     std::cout << sentence;
     std::getline(std::cin, command);
+    if(std::cin.eof())
+      std::exit(1);
     command = numtrim(command);
   }
   return(command);
@@ -99,7 +104,7 @@ std::string format(std::string str)
 }
 
 void  show_info(const Contact& contact)
-{  
+{
   std::cout << "first name: ";
 	std::cout << contact.get_first_name() << std::endl;
   std::cout << "last name: ";
@@ -128,7 +133,7 @@ void PhoneBook::show()
 	{
 		std::cout << std::setw(10) << i + 1 << "|"
               << std::setw(10) << format(Contacts[i].get_first_name()) << "|"
-              << std::setw(10) << format(Contacts[i].get_last_name()) << "|" 
+              << std::setw(10) << format(Contacts[i].get_last_name()) << "|"
               << std::setw(10) << format(Contacts[i].get_nickname()) << std::endl;
 		i++;
 	}
@@ -137,6 +142,8 @@ void PhoneBook::show()
 	if (str_index.length() != 1 || str_index[0] < '1' || str_index[0] > '0'
 		+ contact_count)
 	{
+    if(std::cin.eof())
+      std::exit(1);
 		std::cout << "invalid index" << std::endl;
 		return ;
 	}
