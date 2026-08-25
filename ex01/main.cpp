@@ -9,7 +9,6 @@ int main()
   PhoneBook phonebook;
   std::string command;
 
-  try
   {
     while(true)
     {
@@ -23,9 +22,6 @@ int main()
       else if(command == "SEARCH")
         phonebook.show();
     }
-  }
-  catch (const std::runtime_error&)
-  {
   }
   return 0;
 }
