@@ -2,7 +2,6 @@
 #include "PhoneBook.hpp"
 #include <iostream>
 #include <iomanip>
-#include <stdexcept>
 
 PhoneBook::PhoneBook()
  : contact_count(0),
@@ -20,31 +19,30 @@ std::string trim(std::string str)
   while(end > start && (str[end - 1] == ' ' || str[end - 1] == '\t'))
     end--;
 
-  str = str.substr(start, end - start);
+    str = str.substr(start, end - start);
 
-  int i = 0;
-  while (str[i] != '\0')
-  {
-    if (str[i] == '\t')
-      str[i] = ' ';
-    i++;
-  }
-  return str.substr(start, end - start);
+    int i = 0;
+    while (str[i] != '\0')
+    {
+      if (str[i] == '\t')
+        str[i] = ' ';
+      i++;
+    }
+    return str.substr(start, end - start);
 }
 
-std::string PhoneBook::read_empty(std::string sentence)
+bool PhoneBook::read_empty(const std::string& sentence, std::string& result)
 {
-  std::string command;
-  command = ("");
+  result = "";
 
-  while(command.empty())
+  while(result.empty())
   {
     std::cout << sentence;
-    if (!std::getline(std::cin, command))
-      throw std::runtime_error("");
-    command = trim(command);
+    if (!std::getline(std::cin, result))
+      return false;
+    result = trim(result);
   }
-  return(command);
+  return true;
 }
 
 std::string numtrim(std::string str)
@@ -79,40 +77,54 @@ std::string numtrim(std::string str)
   return "";
 }
 
-std::string PhoneBook::readnum_empty(std::string sentence)
+bool PhoneBook::readnum_empty(const std::string& sentence, std::string& result)
 {
-  std::string command;
-  command = ("");
+  result = "";
 
-  while(command.empty())
+  while(result.empty())
   {
     std::cout << sentence;
-    if (!std::getline(std::cin, command))
-      throw std::runtime_error("");
-    command = numtrim(command);
+    if (!std::getline(std::cin, result))
+      return false;
+    result = numtrim(result);
   }
-  return(command);
+  return true;
 }
 
-void PhoneBook::input_info(Contact& contact)
+bool PhoneBook::input_info(Contact& contact)
 {
-  contact.set_first_name(read_empty("first name = "));
-  contact.set_last_name(read_empty("last name = "));
-  contact.set_nickname(read_empty("nickname = "));
-  contact.set_phone_number(readnum_empty("phone number = "));
-  contact.set_darkest_secret(read_empty("darkest secret = "));
+  std::string input;
+
+  if (!read_empty("first name = ", input))
+    return false;
+  contact.set_first_name(input);
+  if (!read_empty("last name = ", input))
+    return false;
+  contact.set_last_name(input);
+  if (!read_empty("nickname = ", input))
+    return false;
+  contact.set_nickname(input);
+  if (!readnum_empty("phone number = ", input))
+    return false;
+  contact.set_phone_number(input);
+  if (!read_empty("darkest secret = ", input))
+    return false;
+  contact.set_darkest_secret(input);
+  return true;
 }
 
-void PhoneBook::add()
+bool PhoneBook::add()
 {
   Contact contact;
 
-  input_info(contact);
+  if (!input_info(contact))
+    return false;
 	if (contact_count < 8)
 		contact_count++;
 	Contacts[next_index++] = contact;
 	if (next_index == 8)
 		next_index = 0;
+  return true;
 }
 
 std::string format(std::string str)
@@ -136,7 +148,7 @@ void  show_info(const Contact& contact)
 	std::cout << contact.get_darkest_secret() << std::endl;
 }
 
-void PhoneBook::show()
+bool PhoneBook::show()
 {
 	int i;
 	std::string str_index;
@@ -145,7 +157,7 @@ void PhoneBook::show()
   if(contact_count == 0)
   {
     std::cout << "No contacts" << std::endl;
-    return ;
+    return true;
   }
 	i = 0;
 	while (i < contact_count)
@@ -157,13 +169,15 @@ void PhoneBook::show()
 		i++;
 	}
 	std::cout << "Choose Number: ";
-	std::getline(std::cin, str_index);
+	if (!std::getline(std::cin, str_index))
+    return false;
 	if (str_index.length() != 1 || str_index[0] < '1' || str_index[0] > '0'
 		+ contact_count)
 	{
 		std::cout << "invalid index" << std::endl;
-		return ;
+		return true;
 	}
 	index = str_index[0] - '1';
 	show_info(Contacts[index]);
+  return true;
 }

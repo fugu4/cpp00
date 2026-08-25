@@ -8,16 +8,16 @@ class PhoneBook
 {
   public:
   PhoneBook();
-  void add();
-  void show();
+  bool add();
+  bool show();
 
   private:
   Contact Contacts[8];
   int contact_count;
   int next_index;
-  void input_info(Contact& contact);
-  std::string read_empty(std::string sentence);
-  std::string readnum_empty(std::string sentence);
+  bool input_info(Contact& contact);
+  bool read_empty(const std::string& sentence, std::string& result);
+  bool readnum_empty(const std::string& sentence, std::string& result);
 };
 
 #endif 
