@@ -19,16 +19,16 @@ std::string trim(std::string str)
   while(end > start && (str[end - 1] == ' ' || str[end - 1] == '\t'))
     end--;
 
-    str = str.substr(start, end - start);
+  str = str.substr(start, end - start);
 
-    int i = 0;
-    while (str[i] != '\0')
-    {
-      if (str[i] == '\t')
-        str[i] = ' ';
-      i++;
-    }
-    return str.substr(start, end - start);
+  int i = 0;
+  while (str[i] != '\0')
+  {
+    if (str[i] == '\t')
+      str[i] = ' ';
+    i++;
+  }
+    return str;
 }
 
 bool PhoneBook::read_empty(const std::string& sentence, std::string& result)
@@ -70,7 +70,7 @@ std::string numtrim(std::string str)
         str[i] = ' ';
         i++;
       }
-      return str.substr(start, end - start);
+      return str;
     }
     i++;
   }
