@@ -28,7 +28,7 @@ std::string trim(std::string str)
       str[i] = ' ';
     i++;
   }
-    return str.substr(start, end - start);
+    return str;
 }
 
 bool PhoneBook::read_empty(const std::string& sentence, std::string& result)
@@ -70,7 +70,7 @@ std::string numtrim(std::string str)
         str[i] = ' ';
         i++;
       }
-      return str.substr(start, end - start);
+      return str;
     }
     i++;
   }
